@@ -17,7 +17,7 @@ public class ConnectionPoolMannager : IConnectionPoolMannager
 
     public async Task<bool> AddOneInPool(Key PoolId, Key ClientKey)
     {
-        var con = RootConnectionMannager.TryGetSocket(PoolId);
+        var con = RootConnectionMannager.TryGetSocket(ClientKey);
         if (con == null)
             return false;
         return await pools

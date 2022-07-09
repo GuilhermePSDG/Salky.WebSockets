@@ -8,7 +8,7 @@ namespace Example
     [WebSocketRoute]
     public class TesteRoute : WebSocketRouteBase
     {
-        public record Message(Key PoolKey, string Content);
+        public record Message(string PoolKey, string Content);
         public record ModelTest(string Name, DateTime Date)
         {
             public bool valid()
@@ -16,10 +16,10 @@ namespace Example
                 return Name != null && Name.Length > 0 && Date != DateTime.MinValue;
             }
         };
-        [WsGet]
-        public async Task Teste()
+        [WsPost("ping")]
+        public async Task Ping()
         {
-            await SendBack("Teste ok", CurrentPath, CurrentRouteMethod);
+            await SendBack("Pong", CurrentPath, CurrentRouteMethod);
         }
 
         [WsPost("data")]
@@ -32,14 +32,14 @@ namespace Example
         }
 
         [WsListener("entry")]
-        public async Task AddOnPool(Key PoolKey)
+        public async Task AddOnPool(string PoolKey)
         {
-            await AddOnPool(PoolKey);
+            await base.AddOneInPool(PoolKey,User.UserId);
         }
         [WsListener("leave")]
-        public async Task RemoveFromPool(Key PoolKey)
+        public async Task RemoveFromPool(string PoolKey)
         {
-            await RemoveFromPool(PoolKey);
+            await base.RemoveOneFromPool(PoolKey, User.UserId);
         }
         [WsRedirect("message")]
         public async Task RouteToAll(Message msg)

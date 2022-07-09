@@ -39,11 +39,43 @@ ClientCli.instance.AddCommand("send-bin", new Command("Send binary message", asy
 }));
 ClientCli.instance.AddCommand("teste-route", new Command("Send MessageServer Protocol", async () =>
 {
-    foreach (var con in ClientCli.instance.clients)
-        await con.SendMessageServer("teste", "get", null);
-    foreach (var con in ClientCli.instance.clients)
-        await con.SendMessageServer("teste/data", "post", new { name = "teste", date = DateTime.Now });
-    await Task.Delay(2000);
+    var cli = new ClientCli();
+    cli.AddCommand("ping", new Command("", async () =>
+    {
+        foreach(var x in ClientCli.instance.clients)
+            await x.SendMessageServer("teste/ping", "post", "");
+    }));
+    cli.AddCommand("send-data", new Command("", async () =>
+    {
+        foreach (var x in ClientCli.instance.clients)
+            await x.SendMessageServer("teste/data", "post", new { name = "Teste data" , date = DateTime.Now});
+    }));
+    cli.AddCommand("send-to-all", new Command("", async () =>
+    {
+        var r = getInput("Pool Id : ") ?? "defaultpool";
+        var msg = getInput("Content : ") ?? "No Content";
+        foreach (var x in ClientCli.instance.clients)
+            await x.SendMessageServer("teste/message", "redirect", new { poolKey = r, content = msg });
+    }));
+    cli.AddCommand("entry-pool", new Command("", async () =>
+    {
+        var r = getInput("Pool Id : ") ?? "defaultpool";
+        foreach (var x in ClientCli.instance.clients)
+            await x.SendMessageServer("teste/entry", "listener",  r);
+    }));
+    cli.AddCommand("leave-pool", new Command("", async () =>
+    {
+        var r = getInput("Pool Id : ") ?? "defaultpool";
+        foreach (var x in ClientCli.instance.clients)
+            await x.SendMessageServer("teste/leave", "listener",r);
+    }));
+    cli.AddCommand("cls", new Command("", () =>
+    {
+        Console.Clear();
+        return Task.CompletedTask;
+    }));
+    await cli.Run();
+
 }));
 ClientCli.instance.AddCommand("close", new("To close all connections", async () =>
 {
@@ -116,18 +148,30 @@ public class ClientCli
     private readonly Dictionary<string, Command> commands = new ();
     public readonly List<ClientWebSocket> clients = new ();
 
+
+    private bool toQuit = false;
     static ClientCli()
     {
         instance = new ClientCli();
     }
+    public ClientCli()
+    {
+        AddCommand("quit", new("", () =>
+        {
+            this.toQuit = true;
+            return Task.CompletedTask;
+        }));
+    }
     public void AddCommand(string cmd,Command command)
     {
         commands.Add(cmd,command);
+
     }
     public async Task Run()
     {
         while (true)
         {
+            if (this.toQuit) break;
             try
             {
                 Console.ForegroundColor = ConsoleColor.Green;

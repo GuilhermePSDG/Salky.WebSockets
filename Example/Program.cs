@@ -1,6 +1,9 @@
 using Example;
 using Salky.WebSockets.Fluent;
+using Salky.WebSockets.Models;
 using Salky.WebSockets.Router.Extensions;
+using System.Text.Json;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +18,6 @@ builder.Services.AddSalkyWebSocket(options =>
 {
     options.SetAuthGuard<ConnectionAuthGuard>();
     options.MapRoutes();
-    options.DisableAutoConnection();
 });
 
 var app = builder.Build();

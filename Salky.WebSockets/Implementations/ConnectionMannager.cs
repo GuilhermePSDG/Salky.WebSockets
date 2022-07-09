@@ -51,10 +51,8 @@ public class ConnectionMannager : IConnectionMannager
 
     public async Task<int> SendToAll(MessageServer msg)
     {
-        var tasks = new Task[Connections.Count];
         foreach (var con in Connections.Values)
             await con.SendMessageServer(msg);
-        await Task.WhenAll(tasks);
         return Connections.Count;
     }
 
