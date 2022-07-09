@@ -1,9 +1,9 @@
-﻿using System.Reflection;
+﻿using Salky.WebSockets.Router.Contracts;
+using Salky.WebSockets.Router.Exceptions;
+using Salky.WebSockets.Router.Extensions;
 using Salky.WebSockets.Router.Models;
 using Salky.WebSockets.Router.Routing.Atributes;
-using Salky.WebSockets.Router.Contracts;
-using Salky.WebSockets.Router.Extensions;
-using Salky.WebSockets.Router.Exceptions;
+using System.Reflection;
 
 namespace Salky.WebSockets.Router.Routing
 {

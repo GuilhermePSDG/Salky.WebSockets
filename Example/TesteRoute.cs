@@ -1,5 +1,4 @@
 ﻿using Salky.WebSockets.Enums;
-using Salky.WebSockets.Models;
 using Salky.WebSockets.Router.Routing;
 using Salky.WebSockets.Router.Routing.Atributes;
 
@@ -34,7 +33,7 @@ namespace Example
         [WsListener("entry")]
         public async Task AddOnPool(string PoolKey)
         {
-            await base.AddOneInPool(PoolKey,User.UserId);
+            await base.AddOneInPool(PoolKey, User.UserId);
         }
         [WsListener("leave")]
         public async Task RemoveFromPool(string PoolKey)

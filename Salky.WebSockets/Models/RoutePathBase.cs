@@ -10,7 +10,7 @@ public class RoutePathBase : IEqualityComparer<RoutePathBase>, IEquatable<RouteP
 {
     public RoutePathBase(string fullPath, Method method)
     {
-        Path = fullPath;
+        Path = fullPath.Trim('/').ToLower();
         Method = method;
     }
     public RoutePathBase() { }

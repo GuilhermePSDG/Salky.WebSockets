@@ -1,6 +1,5 @@
 ﻿using Salky.WebSockets.Router.Contracts;
 using Salky.WebSockets.Router.Models;
-using System.Collections.Concurrent;
 
 namespace Salky.WebSockets.Router.Routing;
 

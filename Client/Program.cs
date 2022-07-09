@@ -17,7 +17,7 @@ var getInput = (string text) =>
 
 ClientCli.instance.AddCommand("add-con", new("To add connections", async () =>
 {
-    if(!int.TryParse(getInput("The number of connections : "), out var n)) n = 0;
+    if (!int.TryParse(getInput("The number of connections : "), out var n)) n = 0;
     for (int i = 0; i < n; i++)
         ClientCli.instance.clients.Add(await ConnectionFactory());
 }));
@@ -42,13 +42,13 @@ ClientCli.instance.AddCommand("teste-route", new Command("Send MessageServer Pro
     var cli = new ClientCli();
     cli.AddCommand("ping", new Command("", async () =>
     {
-        foreach(var x in ClientCli.instance.clients)
+        foreach (var x in ClientCli.instance.clients)
             await x.SendMessageServer("teste/ping", "post", "");
     }));
     cli.AddCommand("send-data", new Command("", async () =>
     {
         foreach (var x in ClientCli.instance.clients)
-            await x.SendMessageServer("teste/data", "post", new { name = "Teste data" , date = DateTime.Now});
+            await x.SendMessageServer("teste/data", "post", new { name = "Teste data", date = DateTime.Now });
     }));
     cli.AddCommand("send-to-all", new Command("", async () =>
     {
@@ -61,13 +61,13 @@ ClientCli.instance.AddCommand("teste-route", new Command("Send MessageServer Pro
     {
         var r = getInput("Pool Id : ") ?? "defaultpool";
         foreach (var x in ClientCli.instance.clients)
-            await x.SendMessageServer("teste/entry", "listener",  r);
+            await x.SendMessageServer("teste/entry", "listener", r);
     }));
     cli.AddCommand("leave-pool", new Command("", async () =>
     {
         var r = getInput("Pool Id : ") ?? "defaultpool";
         foreach (var x in ClientCli.instance.clients)
-            await x.SendMessageServer("teste/leave", "listener",r);
+            await x.SendMessageServer("teste/leave", "listener", r);
     }));
     cli.AddCommand("cls", new Command("", () =>
     {
@@ -145,8 +145,8 @@ public class ClientCli
 {
     public static ClientCli instance { get; private set; }
 
-    private readonly Dictionary<string, Command> commands = new ();
-    public readonly List<ClientWebSocket> clients = new ();
+    private readonly Dictionary<string, Command> commands = new();
+    public readonly List<ClientWebSocket> clients = new();
 
 
     private bool toQuit = false;
@@ -162,9 +162,9 @@ public class ClientCli
             return Task.CompletedTask;
         }));
     }
-    public void AddCommand(string cmd,Command command)
+    public void AddCommand(string cmd, Command command)
     {
-        commands.Add(cmd,command);
+        commands.Add(cmd, command);
 
     }
     public async Task Run()
@@ -210,9 +210,9 @@ public class ClientCli
 
 
 public static class ex
-{ 
-    public static async Task SendMessageServer(this ClientWebSocket ws,string path,string method,object? data)
+{
+    public static async Task SendMessageServer(this ClientWebSocket ws, string path, string method, object? data)
     {
-        await ws.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new {path=path,method=method,data=data }),WebSocketMessageType.Text,true,CancellationToken.None);
+        await ws.SendAsync(JsonSerializer.SerializeToUtf8Bytes(new { path = path, method = method, data = data }), WebSocketMessageType.Text, true, CancellationToken.None);
     }
 }

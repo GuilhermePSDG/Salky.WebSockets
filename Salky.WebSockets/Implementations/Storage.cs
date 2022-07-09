@@ -1,6 +1,4 @@
 ﻿using Salky.WebSockets.Contracts;
-using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 
 
 namespace Salky.WebSockets.Implementations

@@ -19,8 +19,9 @@ public struct Key : IEquatable<Key>, IComparable<Key>, IEqualityComparer<Key>
     public string Value
     {
         get => _key;
-        set {
-            if(_key != null) throw new InvalidOperationException();
+        set
+        {
+            if (_key != null) throw new InvalidOperationException();
             _key = value;
         }
     }

@@ -14,9 +14,14 @@ public class ConnectionEventHandler_AddOrRemoveFromConnectionMannager : IConnect
     }
     public async Task HandleClose(SalkyWebSocket ws)
     {
+        
         if (await connectionMannager.TryRemoveConnection(ws.User.UserId) == null)
         {
             logger.LogWarning($"Connection not removed from {nameof(IConnectionMannager)} after conection closed");
+        }
+        else
+        {
+            logger.LogInformation("User removed");
         }
     }
     public async Task HandleOpen(SalkyWebSocket ws)
@@ -24,6 +29,10 @@ public class ConnectionEventHandler_AddOrRemoveFromConnectionMannager : IConnect
         if (!await connectionMannager.AddConnection(ws.User.UserId, ws))
         {
             logger.LogWarning($"Connection not added in {nameof(IConnectionMannager)} after conection open");
+        }
+        else
+        {
+            logger.LogInformation($"New user added at {nameof(IConnectionMannager)}");
         }
     }
 }

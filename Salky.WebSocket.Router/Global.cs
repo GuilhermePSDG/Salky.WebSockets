@@ -1,5 +1,5 @@
-﻿global using static Salky.WebSockets.Router.Global;
-global using System.Text.Json;
+﻿global using System.Text.Json;
+global using static Salky.WebSockets.Router.Global;
 using System.Text.Json.Serialization;
 
 namespace Salky.WebSockets.Router

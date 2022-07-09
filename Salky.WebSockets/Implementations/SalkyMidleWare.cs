@@ -4,11 +4,10 @@ using Microsoft.Extensions.Logging;
 using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Enums;
 using Salky.WebSockets.Models;
-using System.Collections.Concurrent;
 using System.Net.WebSockets;
 
 
-internal class SalkyMidleWare 
+internal class SalkyMidleWare
 {
     public SalkyMidleWare(
         RequestDelegate next,
@@ -43,30 +42,30 @@ internal class SalkyMidleWare
         {
             logger.LogInformation("Connection received");
             var usr = await connectionAuth.AutorizeConnection(http);
-            if (usr  == null)
+            if (usr == null)
             {
                 logger.LogInformation("Connection not autorized");
                 return;
             }
             ws = new(await http.WebSockets.AcceptWebSocketAsync(), usr, storageFactory.CreateNew());
-
-            connectionEventHandler.ToList().ForEach(async x =>await x.HandleOpen(ws));
+            connectionEventHandler.ToList().ForEach(async x => await x.HandleOpen(ws));
             logger.LogInformation("Connection autorized");
             await LoopWaitingForMessage(ws, MessageHandler);
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             this.logger.LogError(ex, "Connection Error");
         }
         finally
         {
-            if(ws != null)
+            if (ws != null)
             {
                 logger.LogInformation("Close handler called");
                 try
                 {
                     connectionEventHandler.ToList().ForEach(async x => await x.HandleClose(ws));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     this.logger.LogError(ex, "Error on handle close message");
                 }
@@ -110,13 +109,13 @@ internal class SalkyMidleWare
                 await MessageRouter(ws, result?.MessageType ?? throw new NullReferenceException(nameof(result)), ms, MessageHandler);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.logger.LogError(ex, "");
             }
         }
     }
-    private async Task MessageRouter(SalkyWebSocket ws, WebSocketMessageType msgType, MemoryStream stream,IMessageHandler MessageHandler)
+    private async Task MessageRouter(SalkyWebSocket ws, WebSocketMessageType msgType, MemoryStream stream, IMessageHandler MessageHandler)
     {
         switch (msgType)
         {
@@ -130,7 +129,7 @@ internal class SalkyMidleWare
                 break;
             case WebSocketMessageType.Close:
                 Enum.TryParse(typeof(CloseDescription), ws.CloseStatusDescription, true, out var result);
-                CloseDescription closeDescription = result is CloseDescription description ? description : CloseDescription.Unknow; 
+                CloseDescription closeDescription = result is CloseDescription description ? description : CloseDescription.Unknow;
                 await ws.CloseOutputAsync(ws.CloseStatus ?? WebSocketCloseStatus.NormalClosure, closeDescription);
                 this.logger.LogInformation("Message close executed");
                 break;

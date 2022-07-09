@@ -2,9 +2,7 @@
 using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Enums;
 using System.Net.WebSockets;
-using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 
 namespace Salky.WebSockets.Models;
 

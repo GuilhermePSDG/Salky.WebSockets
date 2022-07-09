@@ -23,7 +23,7 @@ namespace Salky.WebSockets.Exensions
             throw new KeyNotFoundException();
         }
 
-        public static void AddOrUpdate<T>(this IStorage storage,T data) where T : notnull
+        public static void AddOrUpdate<T>(this IStorage storage, T data) where T : notnull
         {
             storage.AddOrUpdate(GetTypeName<T>(), data);
         }

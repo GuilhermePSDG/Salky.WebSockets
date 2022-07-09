@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Salky.WebSockets.Router.Models;
-using Salky.WebSockets.Router.Contracts;
 using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Enums;
 using Salky.WebSockets.Models;
+using Salky.WebSockets.Router.Contracts;
+using Salky.WebSockets.Router.Models;
 
 namespace Salky.WebSockets.Router.Routing
 {

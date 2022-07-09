@@ -21,7 +21,7 @@ namespace Salky.WebSockets.Fluent
             services.AddSingleton<IStorageFactory, DefaultStorageFactory>();
             if (builder.CanInject_ConnectionEventHandler_AddOrRemoveFromConnectionMannager)
             {
-                services.AddSingleton<IConnectionEventHandler, ConnectionEventHandler_AddOrRemoveFromConnectionMannager>();
+                services.Insert(0, new ServiceDescriptor(typeof(IConnectionEventHandler), typeof(ConnectionEventHandler_AddOrRemoveFromConnectionMannager), ServiceLifetime.Singleton));
             }
             //
             return services;

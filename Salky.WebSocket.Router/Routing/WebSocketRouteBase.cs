@@ -1,6 +1,4 @@
-﻿
-using Microsoft.Extensions.DependencyInjection;
-using Salky.WebSockets.Contracts;
+﻿using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Enums;
 using Salky.WebSockets.Models;
 using Salky.WebSockets.Router.Models;
