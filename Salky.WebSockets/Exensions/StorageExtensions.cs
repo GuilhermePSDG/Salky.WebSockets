@@ -22,9 +22,14 @@ namespace Salky.WebSockets.Exensions
                 return res;
             throw new KeyNotFoundException();
         }
+
+        public static void AddOrUpdate<T>(this IStorage storage,T data) where T : notnull
+        {
+            storage.AddOrUpdate(GetTypeName<T>(), data);
+        }
         public static bool TryGet<T>(this IStorage storage, [NotNullWhen(true)] out T? result)
         {
-            switch ((T?)storage.Get(GetTypeName<T>()))
+            switch (storage.Get(GetTypeName<T>()))
             {
                 case JsonObject objt:
                     result = objt.Deserialize<T>();

@@ -34,7 +34,7 @@ public class ConnectionMannager : IConnectionMannager
     public bool ContainsKey(Key ClientKey) => Connections.ContainsKey(ClientKey);
     public async Task<int> SendToMany(Key[] keys, MessageServer msg)
     {
-        var tasks = new List<Task>();
+        var tasks = new List<Task>(keys.Length);
         foreach (var key in keys)
             if (Connections.TryGetValue(key, out var sock))
                 tasks.Add(sock.SendMessageServer(msg));
