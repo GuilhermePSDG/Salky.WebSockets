@@ -83,4 +83,9 @@ public class ConnectionPoolMannager : IConnectionPoolMannager
     {
         return await Task.FromResult(pools.TryRemove(PoolId, out _));
     }
+
+    public bool IsInPool(Key PoolId, Key ClientKey)
+    {
+        return this.pools.TryGetValue(PoolId, out var pool) && pool.ContainsKey(ClientKey);
+    }
 }

@@ -5,7 +5,6 @@ using Salky.WebSockets.Implementations;
 
 namespace Salky.WebSockets.Fluent
 {
-
     public static class Fluent
     {
 
@@ -16,13 +15,22 @@ namespace Salky.WebSockets.Fluent
             if (!builder.GuardSetted)
                 throw new InvalidOperationException($"Please use the method {nameof(ISalkyAuthGuardBuilder.SetAuthGuard)} You must provide a class who implements {nameof(IConnectionAuthGuard)}");
             //
-            services.AddSingleton<IConnectionMannager, ConnectionMannager>();
-            services.AddSingleton<IConnectionPoolMannager, ConnectionPoolMannager>();
-            services.AddSingleton<IStorageFactory, DefaultStorageFactory>();
-            if (builder.CanInject_ConnectionEventHandler_AddOrRemoveFromConnectionMannager)
+            if (!builder._IgnoreAllServices)
             {
-                services.Insert(0, new ServiceDescriptor(typeof(IConnectionEventHandler), typeof(ConnectionEventHandler_AddOrRemoveFromConnectionMannager), ServiceLifetime.Singleton));
+                services.AddSingleton<IConnectionMannager, ConnectionMannager>();
+                services.AddSingleton<IConnectionPoolMannager, ConnectionPoolMannager>();
+                services.AddSingleton<IStorageFactory, DefaultStorageFactory>();
+                services.AddSingleton<ISalkyWebSocketFactory, SalkyWebSocketFactory>();
+                if (builder.IsAspNetAuth)
+                {
+                    SalkyWebSocketFactory.Protocol = "Identifier";
+                }
+                if (builder.CanInject_ConnectionEventHandler_AddOrRemoveFromConnectionMannager)
+                {
+                    services.Insert(0, new ServiceDescriptor(typeof(IConnectionEventHandler), typeof(ConnectionEventHandler_AddOrRemoveFromConnectionMannager), ServiceLifetime.Singleton));
+                }
             }
+           
             //
             return services;
         }

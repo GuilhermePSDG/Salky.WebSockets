@@ -12,10 +12,10 @@ public struct Key : IEquatable<Key>, IComparable<Key>, IEqualityComparer<Key>
     public Key(string value) => _key = value;
     public Key(Guid PoolKey) => _key = PoolKey.ToString();
 
-    public static implicit operator Key(string[] PoolKeys) => new(PoolKeys);
-    public static implicit operator Key(string PoolKey) => new(PoolKey);
-    public static implicit operator Key(Guid PoolKey) => new(PoolKey);
-    public static implicit operator string(Key PoolKey) => PoolKey._key;
+    public static implicit operator Key(string[] values) => new(values);
+    public static implicit operator Key(string value) => new(value);
+    public static implicit operator Key(Guid value) => new(value);
+    public static implicit operator string(Key value) => value._key;
     public string Value
     {
         get => _key;
@@ -31,7 +31,24 @@ public struct Key : IEquatable<Key>, IComparable<Key>, IEqualityComparer<Key>
     public int CompareTo(Key other) => other._key.CompareTo(_key);
     public bool Equals(Key x, Key y) => x._key == y._key;
     public int GetHashCode([DisallowNull] Key obj) => obj._key.GetHashCode();
-    public override bool Equals(object? obj) => obj != null && obj is Key key && key._key == _key;
+    public override bool Equals(object? obj)
+    {
+        switch (obj) 
+        {
+            case null:
+                return false;
+            case Key ke:
+                return this.Equals(ke);
+            case string str:
+                return this.Equals(str);
+            case Guid guid:
+                return this.Equals(guid);
+            case string[] arr:
+                return this.Equals(arr);
+            default:
+                return false;
+        }
+    }
     public static bool operator ==(Key left, Key right) => left.Equals(right);
     public static bool operator !=(Key left, Key right) => !(left == right);
     public static bool operator <(Key left, Key right) => left.CompareTo(right) < 0;

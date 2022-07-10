@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Salky.WebSockets.Contracts;
-using Salky.WebSockets.Models;
 
 namespace Salky.WebSockets.Implementations;
 public class ConnectionEventHandler_AddOrRemoveFromConnectionMannager : IConnectionEventHandler
@@ -12,19 +11,19 @@ public class ConnectionEventHandler_AddOrRemoveFromConnectionMannager : IConnect
         this.logger = logger;
         this.connectionMannager = connectionMannager;
     }
-    public async Task HandleClose(SalkyWebSocket ws)
+    public async Task HandleClose(ISalkyWebSocket ws)
     {
         
         if (await connectionMannager.TryRemoveConnection(ws.User.UserId) == null)
         {
-            logger.LogWarning($"Connection not removed from {nameof(IConnectionMannager)} after conection closed");
+            logger.LogWarning($"Cannot remove from {nameof(IConnectionMannager)} after conection closed");
         }
         else
         {
-            logger.LogInformation("User removed");
+            logger.LogInformation($"User removed from {nameof(IConnectionMannager)}");
         }
     }
-    public async Task HandleOpen(SalkyWebSocket ws)
+    public async Task HandleOpen(ISalkyWebSocket ws)
     {
         if (!await connectionMannager.AddConnection(ws.User.UserId, ws))
         {

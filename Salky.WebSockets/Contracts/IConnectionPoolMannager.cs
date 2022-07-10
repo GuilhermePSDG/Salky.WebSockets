@@ -33,6 +33,8 @@ public interface IConnectionPoolMannager
     /// <param name="msg"></param>
     /// <returns>-1 if pool not exist , 0 if client is not present, 1 if sended</returns>
     public Task<int> SendToOne(Key PoolId, Key ClientKey, MessageServer msg);
+    bool IsInPool(Key PoolId, Key ClientKey);
+
     /// <summary>
     /// 
     /// </summary>

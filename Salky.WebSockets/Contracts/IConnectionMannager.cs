@@ -14,14 +14,14 @@ public interface IConnectionMannager
     /// </summary>
     /// <param name="ClientKey"></param>
     /// <returns><see langword="null"/> if not found</returns>
-    public Task<SalkyWebSocket?> TryRemoveConnection(Key ClientKey);
+    public Task<ISalkyWebSocket?> TryRemoveConnection(Key ClientKey);
     /// <summary>
     /// 
     /// </summary>
     /// <param name="ClientKey"></param>
     /// <param name="socket"></param>
     /// <returns>true if added, false if is already present</returns>
-    public Task<bool> AddConnection(Key ClientKey, SalkyWebSocket socket);
+    public Task<bool> AddConnection(Key ClientKey, ISalkyWebSocket socket);
     /// <summary>
     /// 
     /// </summary>
@@ -42,6 +42,6 @@ public interface IConnectionMannager
     /// <param name="msg"></param>
     /// <returns>the total sended</returns>
     public Task<int> SendToAll(MessageServer msg);
-    internal SalkyWebSocket? TryGetSocket(Key Key);
+    internal ISalkyWebSocket? TryGetSocket(Key Key);
 
 }

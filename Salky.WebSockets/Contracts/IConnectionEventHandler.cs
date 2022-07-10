@@ -1,8 +1,6 @@
-﻿using Salky.WebSockets.Models;
-
-namespace Salky.WebSockets.Contracts;
+﻿namespace Salky.WebSockets.Contracts;
 public interface IConnectionEventHandler
 {
-    public Task HandleOpen(SalkyWebSocket socket);
-    public Task HandleClose(SalkyWebSocket socket);
+    public Task HandleOpen(ISalkyWebSocket socket);
+    public Task HandleClose(ISalkyWebSocket socket);
 }

@@ -14,17 +14,18 @@ namespace Salky.WebSockets.Router.Routing
         public WebSocketRouteBase() { }
 
         public IConnectionPoolMannager connectionPoolMannager;
-
-        public SalkyWebSocket UserSocket { get; set; }
+        public ISalkyWebSocket UserSocket { get; set; }
         public WebSocketUser User => UserSocket.User;
         public IStorage Storage => UserSocket.User.Storage;
-        public Method CurrentRouteMethod { get; private set; }
-        public string CurrentRoutePathClass { get; private set; }
-        public string CurrentPath = "";
+
+        public RoutePath CurrentRoutePath { get; private set; }
+        public Method CurrentRouteMethod => CurrentRoutePath.Method;
+        public string CurrentRoutePathClass => CurrentRoutePath.PathClass;
+        public string CurrentPath => CurrentRoutePath.Path;
         public List<Claim> Claims => UserSocket.User.Claims;
 
         bool builded = false;
-        internal void Constructor(SalkyWebSocket webSocket, IConnectionPoolMannager connectionPoolMannager)
+        internal void Constructor(ISalkyWebSocket webSocket, IConnectionPoolMannager connectionPoolMannager)
         {
             if (!builded)
             {
@@ -36,9 +37,7 @@ namespace Salky.WebSockets.Router.Routing
 
         internal void Inject(RoutePath CurrentPath)
         {
-            CurrentRouteMethod = CurrentPath.Method;
-            CurrentRoutePathClass = CurrentPath.PathClass;
-            this.CurrentPath = CurrentPath.Path;
+            this.CurrentRoutePath = CurrentPath;
         }
         public async Task SendBack<T>(T data, string path, Method method, Status status = Status.Success) where T : notnull
         {

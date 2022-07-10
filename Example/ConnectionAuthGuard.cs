@@ -14,7 +14,7 @@ public class ConnectionAuthGuard : IConnectionAuthGuard
     {
         this.connectionMannager = connectionMannager;
     }
-    public async Task<WebSocketUser?> AutorizeConnection(HttpContext ctx)
+    public async Task<WebSocketUser?> AuthenticateConnection(HttpContext ctx)
     {
         if (!ctx.Request.Path.HasValue)
         {
@@ -33,11 +33,12 @@ public class ConnectionAuthGuard : IConnectionAuthGuard
             else
             {
                 await removed.CloseOutputAsync(WebSocketCloseStatus.PolicyViolation, CloseDescription.DuplicatedConnection);
-                Console.WriteLine("Usuario removido, conexão fechada.");
+                Console.WriteLine("Usuario removido, conexão fechada..");
+                Console.WriteLine("Ignorando request atual..");
             }
             return null;
         }
-        var claims = new List<Claim>() { new("id", usrId) };
+        var claims = new List<Claim>() { new(ClaimTypes.NameIdentifier, usrId) };
         return new WebSocketUser(usrId, claims);
     }
 

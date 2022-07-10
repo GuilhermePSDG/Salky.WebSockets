@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Enums;
-using Salky.WebSockets.Models;
 using System.Net.WebSockets;
-
-
+using Microsoft.AspNetCore.Authentication;
 internal class SalkyMidleWare
 {
     public SalkyMidleWare(
@@ -29,7 +27,8 @@ internal class SalkyMidleWare
         ILogger<SalkyMidleWare> logger,
         IMessageHandler MessageHandler,
         IEnumerable<IConnectionEventHandler> connectionEventHandler,
-        IConnectionAuthGuard connectionAuth
+        IConnectionAuthGuard connectionAuth,
+        ISalkyWebSocketFactory webSocketFactory
         )
     {
         if (!http.WebSockets.IsWebSocketRequest)
@@ -37,20 +36,21 @@ internal class SalkyMidleWare
             await this._next(http);
             return;
         }
-        SalkyWebSocket? ws = null;
+        ISalkyWebSocket? ws = null;
         try
         {
             logger.LogInformation("Connection received");
-            var usr = await connectionAuth.AutorizeConnection(http);
+            var usr = await connectionAuth.AuthenticateConnection(http);
             if (usr == null)
             {
                 logger.LogInformation("Connection not autorized");
                 return;
             }
-            ws = new(await http.WebSockets.AcceptWebSocketAsync(), usr, storageFactory.CreateNew());
+            //ws = this.webSocketFactory.CreateNew(await http.WebSockets.AcceptWebSocketAsync("Identifier"), usr, storageFactory.CreateNew());
+            ws = await webSocketFactory.CreateNewAsync(http.WebSockets, usr, storageFactory.CreateNew());
             connectionEventHandler.ToList().ForEach(async x => await x.HandleOpen(ws));
             logger.LogInformation("Connection autorized");
-            await LoopWaitingForMessage(ws, MessageHandler);
+                await LoopWaitingForMessage(ws, MessageHandler);
         }
         catch (Exception ex)
         {
@@ -72,7 +72,7 @@ internal class SalkyMidleWare
             }
         }
     }
-    private async Task LoopWaitingForMessage(SalkyWebSocket ws
+    private async Task LoopWaitingForMessage(ISalkyWebSocket ws
         , IMessageHandler MessageHandler)
     {
         while (ws.State == WebSocketState.Open)
@@ -115,7 +115,7 @@ internal class SalkyMidleWare
             }
         }
     }
-    private async Task MessageRouter(SalkyWebSocket ws, WebSocketMessageType msgType, MemoryStream stream, IMessageHandler MessageHandler)
+    private async Task MessageRouter(ISalkyWebSocket ws, WebSocketMessageType msgType, MemoryStream stream, IMessageHandler MessageHandler)
     {
         switch (msgType)
         {

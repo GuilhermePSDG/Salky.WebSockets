@@ -15,18 +15,18 @@ public class ConnectionMannager : IConnectionMannager
     {
         Key = "root";
     }
-    public ConcurrentDictionary<Key, SalkyWebSocket> Connections = new();
-    public Task<bool> AddConnection(Key key, SalkyWebSocket socket)
+    public ConcurrentDictionary<Key, ISalkyWebSocket> Connections = new();
+    public Task<bool> AddConnection(Key key, ISalkyWebSocket socket)
     {
         return Task.FromResult(Connections.TryAdd(key, socket));
     }
-    public async Task<SalkyWebSocket?> TryRemoveConnection(Key key)
+    public async Task<ISalkyWebSocket?> TryRemoveConnection(Key key)
     {
         if (!Connections.TryRemove(key, out var sock))
             return null;
         return await Task.FromResult(sock);
     }
-    public SalkyWebSocket? TryGetSocket(Key Key)
+    public ISalkyWebSocket? TryGetSocket(Key Key)
     {
         Connections.TryGetValue(Key, out var sock);
         return sock;

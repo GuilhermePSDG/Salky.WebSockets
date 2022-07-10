@@ -10,11 +10,11 @@ public class RoutePathBase : IEqualityComparer<RoutePathBase>, IEquatable<RouteP
 {
     public RoutePathBase(string fullPath, Method method)
     {
-        Path = fullPath.Trim('/').ToLower();
+        Path = fullPath.ToLower();
         Method = method;
     }
     public RoutePathBase() { }
-    private string genKey() => $"{Path.Trim('/', ' ')}{Method}".ToLower();
+    private string genKey() => $"{Path}-{Method}";
     public string Path { get; init; }
     public Method Method { get; init; }
 
@@ -29,11 +29,15 @@ public class RoutePathBase : IEqualityComparer<RoutePathBase>, IEquatable<RouteP
             return true;
         else if (x == null || y == null)
             return false;
-        return x.Method == y.Method && x.Path == y.Path;
+        return x.Equals(y);
     }
     public int GetHashCode([DisallowNull] RoutePathBase obj) => obj.GenRouteKey().GetHashCode();
     public bool Equals(RoutePathBase? other) => other != null && other.Method == Method && other.Path == Path;
 
+    public override bool Equals(object? obj)
+    {
+        return obj is RoutePathBase route && this.Equals(route);
+    }
 
 
 }
