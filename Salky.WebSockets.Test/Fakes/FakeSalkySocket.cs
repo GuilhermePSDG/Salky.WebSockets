@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Salky.WebSockets.Test.Fakes
@@ -32,9 +33,27 @@ namespace Salky.WebSockets.Test.Fakes
         {
         }
 
-        public Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken)
+
+        private Queue<MessageServer> Messages = new Queue<MessageServer>();
+        public void EmulateReceiveMessage(MessageServer message)
         {
-            throw new NotImplementedException();
+            this.Messages.Enqueue(message);
+        }
+        public async Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken)
+        {
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    if (Messages.Any())
+                        break;
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+            });
+            var msg = Messages.Dequeue();
+            var b = JsonSerializer.SerializeToUtf8Bytes(msg, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            Array.Copy(b, buffer.Array ?? throw new(), (b.Length ));
+            return new WebSocketReceiveResult(b.Length, WebSocketMessageType.Text, true);
         }
 
         public int TotalErrosSended=0; 
