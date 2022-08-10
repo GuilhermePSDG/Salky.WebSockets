@@ -2,7 +2,7 @@
 using Salky.WebSockets.Router.Routing;
 using Salky.WebSockets.Router.Routing.Atributes;
 
-namespace Example
+namespace Example.WsRoutes
 {
     [WebSocketRoute]
     public class TesteRoute : WebSocketRouteBase
@@ -15,6 +15,7 @@ namespace Example
                 return Name != null && Name.Length > 0 && Date != DateTime.MinValue;
             }
         };
+
         [WsPost("ping")]
         public async Task Ping()
         {
@@ -33,13 +34,15 @@ namespace Example
         [WsListener("entry")]
         public async Task AddOnPool(string PoolKey)
         {
-            await base.AddOneInPool(PoolKey, User.UserId);
+            await AddOneInPool(PoolKey, User.UserId);
         }
+
         [WsListener("leave")]
         public async Task RemoveFromPool(string PoolKey)
         {
-            await base.RemoveOneFromPool(PoolKey, User.UserId);
+            await RemoveOneFromPool(PoolKey, User.UserId);
         }
+
         [WsRedirect("message")]
         public async Task RouteToAll(Message msg)
         {

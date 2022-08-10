@@ -7,8 +7,6 @@ using System.Security.Claims;
 using System.Text;
 
 
-var res = 2 & 2;
-return;
 
 var builder = WebApplication.CreateBuilder(args);
 

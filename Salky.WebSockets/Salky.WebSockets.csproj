@@ -1,23 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 
-	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	  <FileVersion>1.0.3.8</FileVersion>
-	  <Version>1.0.3.8</Version>
-	  <BaseOutputPath>C:\Users\0\Documents\nuget</BaseOutputPath>
-  </PropertyGroup>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.2.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6" />
-	  <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.2.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-  </ItemGroup>
+		<FileVersion>1.0.4.2</FileVersion>
+		<Version>1.0.4.2</Version>
+		<BaseOutputPath>C:\Users\0\Documents\nuget</BaseOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.2.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+	</ItemGroup>
 
 </Project>

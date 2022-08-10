@@ -117,6 +117,7 @@ public class SalkyMidleWare
     }
     private async Task MessageRouter(ISalkyWebSocket ws, WebSocketMessageType msgType, MemoryStream stream, IMessageHandler MessageHandler)
     {
+
         switch (msgType)
         {
             case WebSocketMessageType.Text:
@@ -128,6 +129,7 @@ public class SalkyMidleWare
                 await MessageHandler.HandleBinary(ws, stream);
                 break;
             case WebSocketMessageType.Close:
+                this.logger.LogInformation($"{ws.CloseStatusDescription},{ws.CloseStatus}");
                 Enum.TryParse(typeof(CloseDescription), ws.CloseStatusDescription, true, out var result);
                 CloseDescription closeDescription = result is CloseDescription description ? description : CloseDescription.Unknow;
                 await ws.CloseOutputAsync(ws.CloseStatus ?? WebSocketCloseStatus.NormalClosure, closeDescription);
