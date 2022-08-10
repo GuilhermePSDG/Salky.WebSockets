@@ -25,9 +25,6 @@ namespace Salky.WebSockets.Test.SalkyWebSockets.Models
 
             Assert.AreEqual(key, guid);
             Assert.AreEqual(key, guidString);
-
-            Assert.AreEqual(key, guid);
-            Assert.AreEqual(key, guidString);
         }
         [TestMethod]
         public void CannotBeEquals()
@@ -37,6 +34,7 @@ namespace Salky.WebSockets.Test.SalkyWebSockets.Models
 
             Assert.AreNotEqual(Key1, Key2);
             Assert.AreNotEqual(Key1, "A");
+            Assert.AreNotEqual(Key2, "a");
         }
         [TestMethod]
         public void HashCodeMustBeEquals()

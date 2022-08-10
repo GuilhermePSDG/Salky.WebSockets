@@ -1,26 +1,21 @@
 ﻿using Salky.WebSockets.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.WebSockets;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Salky.WebSockets.Test.Fakes
 {
-    internal class FakeSalkySocket : ISalkyWebSocket
+    internal class FakeISalkyWebSocket : ISalkyWebSocket
     {
         public string ConId = "";
-        public FakeSalkySocket(string ConId)
+        public FakeISalkyWebSocket(string ConId)
         {
             this.ConId = ConId;
         }
-        public WebSocketCloseStatus? CloseStatus => throw new NotImplementedException();
+        public WebSocketCloseStatus? CloseStatus { get; set; }=WebSocketCloseStatus.NormalClosure;
 
-        public string? CloseStatusDescription => throw new NotImplementedException();
+        public string? CloseStatusDescription => "";
 
-        public WebSocketState State => throw new NotImplementedException();
+        public WebSocketState State { get; set; }= WebSocketState.Open;
 
         public WebSocketUser User => throw new NotImplementedException();
 
@@ -31,14 +26,16 @@ namespace Salky.WebSockets.Test.Fakes
 
         public void Dispose()
         {
+
         }
 
-
         private Queue<MessageServer> Messages = new Queue<MessageServer>();
+
         public void EmulateReceiveMessage(MessageServer message)
         {
             this.Messages.Enqueue(message);
         }
+
         public async Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken)
         {
             await Task.Run(() =>

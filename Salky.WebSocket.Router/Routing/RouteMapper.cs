@@ -11,19 +11,19 @@ namespace Salky.WebSockets.Router.Routing
     {
         public List<RouteInfo> Map()
         {
-            Dictionary<string, RouteInfo> InRoutes = new();
+            Dictionary<string, RouteInfo> MappedRoutes = new();
             foreach (var @class in AllWebSocketRoutesClass)
             {
-                foreach (var method in @class.GetMethodsWithAtribute<RouteMethodAtribute>())
+                foreach (var method in @class.GetMethodsWithAttribute<RouteMethodAttribute>())
                 {
                     RouteInfo routeInfo = CreateRouteInfo(@class, method);
                     var key = routeInfo.RoutePath.GenRouteKey();
-                    if (InRoutes.ContainsKey(key))
+                    if (MappedRoutes.ContainsKey(key))
                         throw new DuplicatedRouteKeyException($"Duplicated WebSocoket Route, Class : {@class.FullName} , Method : {method.Name}");
-                    InRoutes.Add(key, routeInfo);
+                    MappedRoutes.Add(key, routeInfo);
                 }
             }
-            return InRoutes.Values.ToList();
+            return MappedRoutes.Values.ToList();
         }
         public static IEnumerable<Type> AllWebSocketRoutesClass =>
             ReflectionExtensions
@@ -43,7 +43,7 @@ namespace Salky.WebSockets.Router.Routing
 
         private RoutePath GenerateRoutePath(Type @class, MethodInfo method)
         {
-            var methodAtribute = method.GetRequiredAtribute<RouteMethodAtribute>();
+            var methodAtribute = method.GetRequiredAtribute<RouteMethodAttribute>();
             var classAtribute = @class.GetRequiredAtribute<WebSocketRoute>();
             var classPath = classAtribute.routeName ?? @class.Name.ToLower().Split("route")[0];
             return new RoutePath(classPath, methodAtribute.routePath, methodAtribute.routeMethod);

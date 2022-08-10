@@ -6,6 +6,10 @@ using Salky.WebSockets.Router.Extensions;
 using System.Security.Claims;
 using System.Text;
 
+
+var res = 2 & 2;
+return;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,7 +31,6 @@ builder.Services.AddSalkyWebSocket(options =>
 //builder.Services.AddSalkyWebSocket(options =>
 //{
 //    options.MapRoutes();
-//    //Must provide a unique identifier
 //    options.UseAspNetAuth(x => x.First(x => x.Type == ClaimTypes.NameIdentifier));
 //});
 //builder.Services

@@ -5,7 +5,7 @@ using System.Net.WebSockets;
 
 namespace Salky.WebSockets.Contracts
 {
-    public interface ISalkyWebSocket
+    public interface ISalkyWebSocket : IDisposable
     {
         public WebSocketCloseStatus? CloseStatus { get; }
         public string? CloseStatusDescription { get; }
@@ -15,6 +15,5 @@ namespace Salky.WebSockets.Contracts
         public Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken);
         public Task SendErrorAsync(string message, string path, Method method = Method.POST);
         public Task SendMessageServer(MessageServer messageServer);
-        public void Dispose();
     }
 }

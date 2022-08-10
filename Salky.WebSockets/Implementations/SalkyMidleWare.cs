@@ -5,7 +5,7 @@ using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Enums;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Authentication;
-internal class SalkyMidleWare
+public class SalkyMidleWare
 {
     public SalkyMidleWare(
         RequestDelegate next,
@@ -50,7 +50,7 @@ internal class SalkyMidleWare
             ws = await webSocketFactory.CreateNewAsync(http.WebSockets, usr, storageFactory.CreateNew());
             connectionEventHandler.ToList().ForEach(async x => await x.HandleOpen(ws));
             logger.LogInformation("Connection autorized");
-                await LoopWaitingForMessage(ws, MessageHandler);
+            await LoopWaitingForMessage(ws, MessageHandler);
         }
         catch (Exception ex)
         {

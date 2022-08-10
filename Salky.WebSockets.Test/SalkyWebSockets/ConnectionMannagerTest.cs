@@ -13,16 +13,16 @@ namespace Salky.WebSockets.Test.SalkyWebSockets
     {
         private IConnectionMannager connectionMannager = new ConnectionMannager();
 
-        internal FakeSalkySocket FakeSocket1 { get; private set; }
-        internal FakeSalkySocket FakeSocket2 { get; private set; }
-        internal FakeSalkySocket FakeSocket3 { get; private set; }
+        internal FakeISalkyWebSocket FakeSocket1 { get; private set; }
+        internal FakeISalkyWebSocket FakeSocket2 { get; private set; }
+        internal FakeISalkyWebSocket FakeSocket3 { get; private set; }
 
         [TestInitialize]
         public void Initialize()
         {
-            FakeSocket1 = new FakeSalkySocket("1");
-            FakeSocket2 = new FakeSalkySocket("2");
-            FakeSocket3 = new FakeSalkySocket("3");
+            FakeSocket1 = new FakeISalkyWebSocket("1");
+            FakeSocket2 = new FakeISalkyWebSocket("2");
+            FakeSocket3 = new FakeISalkyWebSocket("3");
             connectionMannager.AddConnection(FakeSocket1.ConId, FakeSocket1);
             connectionMannager.AddConnection(FakeSocket2.ConId, FakeSocket2);
             connectionMannager.AddConnection(FakeSocket3.ConId, FakeSocket3);
