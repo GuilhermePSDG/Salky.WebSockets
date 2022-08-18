@@ -1,36 +1,49 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Implementations;
+using Salky.WebSockets.Models;
 
 namespace Salky.WebSockets.Fluent
 {
+
+    public class DefaultConectionGuard : IConnectionAuthGuard, IConnectionEventHandler
+    {
+        public Task<WebSocketUser?> AuthenticateConnection(HttpContext httpContext)
+        {
+            return Task.FromResult<WebSocketUser?>(new WebSocketUser(Guid.NewGuid(), new List<System.Security.Claims.Claim>()));
+        }
+
+        public async Task HandleClose(ISalkyWebSocket socket)
+        {
+            await socket.SendMessageServer(new MessageServer("connected", Enums.Method.POST, Enums.Status.Success, new
+            {
+                Message = "Connected successfully",
+                ConnectionId = socket.User.UserId,
+            }));
+        }
+
+        public Task HandleOpen(ISalkyWebSocket socket) => Task.CompletedTask;
+    }
+
     public static class Fluent
     {
-
-        public static IServiceCollection AddSalkyWebSocket(this IServiceCollection services, Action<ISalkyAuthGuardBuilder> options)
+        public static IServiceCollection AddSalkyWebSocket(this IServiceCollection services, Action<ISalkyOptions> options)
         {
             var builder = new SalkyWebSocketBuilder(services);
             options(builder);
             if (!builder.GuardSetted)
-                throw new InvalidOperationException($"Please use the method {nameof(ISalkyAuthGuardBuilder.SetAuthGuard)} You must provide a class who implements {nameof(IConnectionAuthGuard)}");
-            //
-            if (!builder._IgnoreAllServices)
             {
-                services.AddSingleton<IConnectionMannager, ConnectionMannager>();
-                services.AddSingleton<IConnectionPoolMannager, ConnectionPoolMannager>();
-                services.AddSingleton<IStorageFactory, DefaultStorageFactory>();
-                services.AddSingleton<ISalkyWebSocketFactory, SalkyWebSocketFactory>();
-                if (builder.IsAspNetAuth)
-                {
-                    SalkyWebSocketFactory.Protocol = "Identifier";
-                }
-                if (builder.CanInject_ConnectionEventHandler_AddOrRemoveFromConnectionMannager)
-                {
-                    services.Insert(0, new ServiceDescriptor(typeof(IConnectionEventHandler), typeof(ConnectionEventHandler_AddOrRemoveFromConnectionMannager), ServiceLifetime.Singleton));
-                }
+                builder.SetAuthGuard<DefaultConectionGuard>();
+                var previusColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"To use a custom auth guard you must use the method {nameof(ISalkyOptions.SetAuthGuard)}");
+                Console.ForegroundColor = previusColor;
             }
-           
+            //
+            services.AddSingleton<IConnectionMannager, ConnectionMannager>();
+            services.AddSingleton<ISalkyWebSocketFactory, SalkyWebSocketFactory>();
             //
             return services;
         }

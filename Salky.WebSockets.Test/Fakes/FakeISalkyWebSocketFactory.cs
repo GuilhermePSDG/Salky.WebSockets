@@ -5,7 +5,7 @@ namespace Salky.WebSockets.Test.Fakes
 {
     public class FakeISalkyWebSocketFactory : ISalkyWebSocketFactory
     {
-        public async Task<ISalkyWebSocket> CreateNewAsync(WebSocketManager webSocketManager, WebSocketUser user, IStorage storage)
+        public async Task<ISalkyWebSocket> CreateNewAsync(WebSocketManager webSocketManager, WebSocketUser user)
         {
             return await Task.FromResult(new FakeISalkyWebSocket("abcd"));
         }

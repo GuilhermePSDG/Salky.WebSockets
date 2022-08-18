@@ -12,8 +12,13 @@ namespace Salky.WebSockets.Router.Routing
             if (route.Parameters == null || route.Parameters.Length == 0) return new object[0];
             var param = route.Parameters[0];
             var paramType = param.ParameterType;
+            if (paramType == typeof(MessageServer))
+            {
+                return new object[] { messageServer };
+            }
             switch (messageServer.Data)
             {
+
                 case JsonElement jsonElement:
                     return new object[] { JsonElementParser(jsonElement, paramType) };
                 case string json:

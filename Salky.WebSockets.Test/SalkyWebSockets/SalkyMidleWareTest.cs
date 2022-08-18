@@ -15,7 +15,6 @@ namespace Salky.WebSockets.Test.SalkyWebSockets
         private List<FakeIConnectionEventHandler> conEventsHandler;
         private FakeIConnectionAuthGuard conGuard;
         private FakeISalkyWebSocketFactory conFactory;
-        private DefaultStorageFactory storageFactory;
 
         [TestInitialize]
         public void Init()
@@ -27,8 +26,7 @@ namespace Salky.WebSockets.Test.SalkyWebSockets
             this.conEventsHandler = new List<FakeIConnectionEventHandler>() { new FakeIConnectionEventHandler() };
             this.conGuard = new FakeIConnectionAuthGuard();
             this.conFactory = new FakeISalkyWebSocketFactory();
-            this.storageFactory = new DefaultStorageFactory();
-            this.MidleWare = new SalkyMidleWare(this.next, this.log, this.storageFactory);
+            this.MidleWare = new SalkyMidleWare(this.next, this.log);
         }
         private int NextCalledCount = 0;
         private Task Next(HttpContext ctx)
@@ -42,7 +40,7 @@ namespace Salky.WebSockets.Test.SalkyWebSockets
         public async Task TestInvoke()
         {
             this.conGuard.CanAutorize = true;
-            var invokeTask = this.MidleWare.InvokeAsync(ctx,log,msgHandler, conEventsHandler, conGuard, conFactory);
+            var invokeTask = this.MidleWare.InvokeAsync(ctx, log, msgHandler, conEventsHandler, conGuard, conFactory);
             await Task.Delay(2000);
             AutorizedConnectionTests(1);
             this.conGuard.CanAutorize = false;
@@ -64,14 +62,14 @@ namespace Salky.WebSockets.Test.SalkyWebSockets
             await Task.Delay(2000);
             Assert.AreEqual(this.msgHandler.HandleTextCount, 1);
             var msgReiceved = this.msgHandler.MessageServers.Last();
-            Assert.AreEqual(msgReiceved.GenRouteKey(),msgSended.GenRouteKey());
+            Assert.AreEqual(msgReiceved.GenRouteKey(), msgSended.GenRouteKey());
         }
 
-        
+
         public void UnautorizedConnectionTests(int expectedCount)
         {
             AutenticationCountMustBeEqual(expectedCount);
-            AcceptCountMustBeEqual((expectedCount-1));
+            AcceptCountMustBeEqual((expectedCount - 1));
             HandleOpenCountMustBeEqual((expectedCount - 1));
         }
         public void AutorizedConnectionTests(int expectedCount)
@@ -84,7 +82,7 @@ namespace Salky.WebSockets.Test.SalkyWebSockets
         {
             Assert.AreEqual(this.ctx.WebSockets.AcceptWebSocketAsyncCounter, expectedCount);
         }
-     
+
         void AutenticationCountMustBeEqual(int expectedCount)
         {
             Assert.AreEqual(this.conGuard.AutenticateConnectionCount, expectedCount);

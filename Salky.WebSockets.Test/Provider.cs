@@ -11,7 +11,6 @@ namespace Salky.WebSockets.Test
             var services = new ServiceCollection();
             services.AddSingleton<IConnectionMannager, ConnectionMannager>();
             services.AddSingleton<IConnectionPoolMannager, ConnectionPoolMannager>();
-            services.AddSingleton<IStorageFactory, DefaultStorageFactory>();
             services.AddSingleton<ISalkyWebSocketFactory, SalkyWebSocketFactory>();
         }
         private static IServiceProvider provider;

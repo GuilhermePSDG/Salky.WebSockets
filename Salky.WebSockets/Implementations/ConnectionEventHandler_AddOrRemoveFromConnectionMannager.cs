@@ -2,18 +2,18 @@
 using Salky.WebSockets.Contracts;
 
 namespace Salky.WebSockets.Implementations;
-public class ConnectionEventHandler_AddOrRemoveFromConnectionMannager : IConnectionEventHandler
+public class ConnectionEventHandler_AddOrRemoveFromRootConnectionMannager : IConnectionEventHandler
 {
     private readonly ILogger<IConnectionEventHandler> logger;
     private readonly IConnectionMannager connectionMannager;
-    public ConnectionEventHandler_AddOrRemoveFromConnectionMannager(ILogger<IConnectionEventHandler> logger, IConnectionMannager connectionMannager)
+    public ConnectionEventHandler_AddOrRemoveFromRootConnectionMannager(ILogger<IConnectionEventHandler> logger, IConnectionMannager connectionMannager)
     {
         this.logger = logger;
         this.connectionMannager = connectionMannager;
     }
     public async Task HandleClose(ISalkyWebSocket ws)
     {
-        
+
         if (await connectionMannager.TryRemoveConnection(ws.User.UserId) == null)
         {
             logger.LogWarning($"Cannot remove from {nameof(IConnectionMannager)} after conection closed");

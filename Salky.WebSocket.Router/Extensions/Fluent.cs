@@ -10,7 +10,7 @@ namespace Salky.WebSockets.Router.Extensions;
 
 public static class Fluent
 {
-    public static void MapRoutes(this ISalkyAuthGuardBuilder salkyWebSocketBuilder)
+    public static void UseRouter(this ISalkyOptions salkyWebSocketBuilder)
     {
         foreach (var @class in RouteMapper.AllWebSocketRoutesClass)
             salkyWebSocketBuilder.Services.AddScoped(@class);
@@ -20,11 +20,6 @@ public static class Fluent
             .AddScoped<IConnectionEventHandler, RouteResolver>()
             .AddScoped<IRouteMapper, RouteMapper>()
             .AddScoped<IRouteParametersParser, RouteParameterParser>();
-    }
-
-    private static void UseSalkyWebSocketMinimalRouter(this ISalkyAuthGuardBuilder salkyWebSocketBuilder)
-    {
-        throw new NotImplementedException();
     }
 
 }

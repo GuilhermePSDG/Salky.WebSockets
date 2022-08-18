@@ -8,9 +8,9 @@ namespace Salky.WebSockets.Implementations
     public class SalkyWebSocketFactory : ISalkyWebSocketFactory
     {
         public static string? Protocol { get; set; } = null;
-        public async Task<ISalkyWebSocket> CreateNewAsync(WebSocketManager ws, WebSocketUser user, IStorage storage)
+        public async Task<ISalkyWebSocket> CreateNewAsync(WebSocketManager ws, WebSocketUser user)
         {
-            return new SalkyWebSocket(await ws.AcceptWebSocketAsync(SalkyWebSocketFactory.Protocol), user, storage);
+            return new SalkyWebSocket(await ws.AcceptWebSocketAsync(SalkyWebSocketFactory.Protocol), user);
         }
     }
 

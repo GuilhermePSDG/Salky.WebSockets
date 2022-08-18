@@ -13,12 +13,11 @@ public class SalkyWebSocket : ISalkyWebSocket
     private WebSocket webSocket;
     public readonly Key UniqueRandomId;
     public WebSocketUser User { get; set; }
-    public SalkyWebSocket(WebSocket socket, WebSocketUser user, IStorage storage)
+    public SalkyWebSocket(WebSocket socket, WebSocketUser user)
     {
         webSocket = socket;
         UniqueRandomId = Guid.NewGuid();
         User = user;
-        user.Storage = storage;
     }
 
     //public bool CanClose => State == WebSocketState.Open || State == WebSocketState.CloseReceived;
@@ -33,7 +32,7 @@ public class SalkyWebSocket : ISalkyWebSocket
     {
         TRY(() =>
         {
-            if ((this.webSocket.State != WebSocketState.Closed && this.webSocket.State != WebSocketState.Aborted)) 
+            if ((this.webSocket.State != WebSocketState.Closed && this.webSocket.State != WebSocketState.Aborted))
                 this.webSocket.Abort();
         });
         TRY(webSocket.Dispose);

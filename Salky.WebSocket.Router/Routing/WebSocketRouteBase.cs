@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace Salky.WebSockets.Router.Routing
 {
-    public class WebSocketRouteBase
+    public class WebSocketRouteBase : IConnectionPoolMannager
     {
         public virtual Task OnConnectAsync() => Task.CompletedTask;
         public virtual Task OnDisconnectAsync() => Task.CompletedTask;
@@ -16,8 +16,6 @@ namespace Salky.WebSockets.Router.Routing
         public IConnectionPoolMannager connectionPoolMannager;
         public ISalkyWebSocket UserSocket { get; set; }
         public WebSocketUser User => UserSocket.User;
-        public IStorage Storage => UserSocket.User.Storage;
-
         public RoutePath CurrentRoutePath { get; private set; }
         public Method CurrentRouteMethod => CurrentRoutePath.Method;
         public string CurrentRoutePathClass => CurrentRoutePath.PathClass;
@@ -39,12 +37,12 @@ namespace Salky.WebSockets.Router.Routing
         {
             this.CurrentRoutePath = CurrentPath;
         }
-        public async Task SendBack<T>(T data, string path, Method method, Status status = Status.Success) where T : notnull
+        public virtual async Task SendBack<T>(T data, string path, Method method, Status status = Status.Success) where T : notnull
         {
             await UserSocket.SendMessageServer(new MessageServer(path, method, status, data));
         }
 
-        public async Task SendErrorBack(string currentRoute, string message, Method method = Method.POST)
+        public virtual async Task SendErrorBack(string currentRoute, string message, Method method = Method.POST)
         {
             await SendBack(
                 data: new
@@ -56,32 +54,51 @@ namespace Salky.WebSockets.Router.Routing
                 status: Status.Error
                 );
         }
-
-        public async Task<bool> DeletePool(Key PoolId)
+        public virtual async Task<int> SendToAllInPool<T>(Key PoolKey, string Path, Method method, T data) where T : notnull
+        {
+            return await connectionPoolMannager.SendToAllInPool(PoolKey, new MessageServer(Path, method, Status.Success, data));
+        }
+        public virtual async Task<bool> SendToOneInPool<T>(Key PoolKey, Key ClientKey, string Path, Method method, T data) where T : notnull
+        {
+            return await connectionPoolMannager.SendToOneInPool(PoolKey, ClientKey, new MessageServer(Path, method, Status.Success, data)) > 0;
+        }
+        //
+        public virtual async Task<bool> DeletePool(Key PoolId)
         {
             return await connectionPoolMannager.DeletePool(PoolId);
         }
-        public async Task<int> AddManyInPool(Key PoolId, params Key[] ClientsId)
+        public virtual async Task<int> AddManyInPool(Key PoolId, params Key[] ClientsId)
         {
             return await connectionPoolMannager.AddManyInPool(PoolId, ClientsId);
         }
-        public async Task<bool> AddOneInPool(Key PoolId, Key ClientKey)
+        public virtual async Task<bool> AddOneInPool(Key PoolId, Key ClientKey)
         {
             return await connectionPoolMannager.AddOneInPool(PoolId, ClientKey);
         }
-        public async Task<bool> RemoveOneFromPool(Key PoolKey, Key ClientKey)
+
+        public virtual Task<int> RemoveOneFromPool(Key Poolid, Key ClientKey)
         {
-            return await connectionPoolMannager.RemoveOneFromPool(PoolKey, ClientKey) > 0;
-        }
-        public async Task<int> SendToAllInPool<T>(Key PoolKey, string Path, Method method, T data) where T : notnull
-        {
-            return await connectionPoolMannager.SendToAll(PoolKey, new MessageServer(Path, method, Status.Success, data));
-        }
-        public async Task<bool> SendToOneInPool<T>(Key PoolKey, Key ClientKey, string Path, Method method, T data) where T : notnull
-        {
-            return await connectionPoolMannager.SendToOne(PoolKey, ClientKey, new MessageServer(Path, method, Status.Success, data)) > 0;
+            return connectionPoolMannager.RemoveOneFromPool(Poolid, ClientKey);
         }
 
+        public Task<int> SendToOneInPool(Key PoolId, Key ClientKey, MessageServer msg)
+        {
+            return connectionPoolMannager.SendToOneInPool(PoolId, ClientKey, msg);
+        }
 
+        public bool IsInPool(Key PoolId, Key ClientKey)
+        {
+            return connectionPoolMannager.IsInPool(PoolId, ClientKey);
+        }
+
+        public Task<int> SendToManyInPool(Key PoolId, Key[] keys, MessageServer msg)
+        {
+            return connectionPoolMannager.SendToManyInPool(PoolId, keys, msg);
+        }
+
+        public Task<int> SendToAllInPool(Key PoolId, MessageServer msg)
+        {
+            return connectionPoolMannager.SendToAllInPool(PoolId, msg);
+        }
     }
 }

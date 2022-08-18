@@ -32,7 +32,7 @@ public interface IConnectionPoolMannager
     /// <param name="ClientKey"></param>
     /// <param name="msg"></param>
     /// <returns>-1 if pool not exist , 0 if client is not present, 1 if sended</returns>
-    public Task<int> SendToOne(Key PoolId, Key ClientKey, MessageServer msg);
+    public Task<int> SendToOneInPool(Key PoolId, Key ClientKey, MessageServer msg);
     bool IsInPool(Key PoolId, Key ClientKey);
 
     /// <summary>
@@ -42,14 +42,14 @@ public interface IConnectionPoolMannager
     /// <param name="keys"></param>
     /// <param name="msg"></param>
     /// <returns>-1 if pool not exist or the total of clients received</returns>
-    public Task<int> SendToMany(Key PoolId, Key[] keys, MessageServer msg);
+    public Task<int> SendToManyInPool(Key PoolId, Key[] keys, MessageServer msg);
     /// <summary>
     /// 
     /// </summary>
     /// <param name="PoolId"></param>
     /// <param name="msg"></param>
     /// <returns>The ammount of messages sended</returns>
-    public Task<int> SendToAll(Key PoolId, MessageServer msg);
+    public Task<int> SendToAllInPool(Key PoolId, MessageServer msg);
     /// <summary>
     /// 
     /// </summary>

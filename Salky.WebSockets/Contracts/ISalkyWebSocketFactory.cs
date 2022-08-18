@@ -6,6 +6,6 @@ namespace Salky.WebSockets.Contracts
 {
     public interface ISalkyWebSocketFactory
     {
-        public Task<ISalkyWebSocket> CreateNewAsync(WebSocketManager webSocketManager, WebSocketUser user, IStorage storage);
+        public Task<ISalkyWebSocket> CreateNewAsync(WebSocketManager webSocketManager, WebSocketUser user);
     }
 }

@@ -73,7 +73,16 @@ namespace Salky.WebSockets.Router.Routing
                 await socket.SendErrorAsync("Invalid json message", "error");
                 return;
             }
-            await Route(socket, msg);
+            try
+            {
+                await Route(socket, msg);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "");
+                await socket.SendErrorAsync("Routing error", "error");
+                return;
+            }
         }
 
         private async Task ForEachWebSocketRouteBase(ISalkyWebSocket ws, Func<WebSocketRouteBase, Task> act)

@@ -9,19 +9,16 @@ public class SalkyMidleWare
 {
     public SalkyMidleWare(
         RequestDelegate next,
-        ILogger<SalkyMidleWare> logger,
-        IStorageFactory storageFactory
+        ILogger<SalkyMidleWare> logger
         )
     {
         this._next = next;
         this.logger = logger;
-        this.storageFactory = storageFactory;
         logger.LogInformation("SalkyMidleWare started");
     }
 
     private readonly RequestDelegate _next;
     private readonly ILogger<SalkyMidleWare> logger;
-    private readonly IStorageFactory storageFactory;
 
     public async Task InvokeAsync(HttpContext http,
         ILogger<SalkyMidleWare> logger,
@@ -47,7 +44,7 @@ public class SalkyMidleWare
                 return;
             }
             //ws = this.webSocketFactory.CreateNew(await http.WebSockets.AcceptWebSocketAsync("Identifier"), usr, storageFactory.CreateNew());
-            ws = await webSocketFactory.CreateNewAsync(http.WebSockets, usr, storageFactory.CreateNew());
+            ws = await webSocketFactory.CreateNewAsync(http.WebSockets, usr);
             connectionEventHandler.ToList().ForEach(async x => await x.HandleOpen(ws));
             logger.LogInformation("Connection autorized");
             await LoopWaitingForMessage(ws, MessageHandler);

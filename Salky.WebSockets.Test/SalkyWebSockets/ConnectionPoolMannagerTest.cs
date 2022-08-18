@@ -23,7 +23,7 @@ namespace Salky.WebSockets.Test.SalkyWebSockets
             connectionMannager.AddConnection(FakeSocket2.ConId, FakeSocket2);
             connectionMannager.AddConnection(FakeSocket3.ConId, FakeSocket3);
 
-            connectionPoolMannager = new ConnectionPoolMannager(connectionMannager);
+            connectionPoolMannager = new ConnectionPoolMannager(null, connectionMannager);
 
             connectionPoolMannager.AddManyInPool("Group", new Key[] { "1", "2", "3" });
             connectionPoolMannager.AddManyInPool("Friends", new Key[] { "1", "2" });

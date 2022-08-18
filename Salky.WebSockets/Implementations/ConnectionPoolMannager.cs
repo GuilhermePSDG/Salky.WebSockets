@@ -1,4 +1,5 @@
-﻿using Salky.WebSockets.Contracts;
+﻿using Microsoft.Extensions.Logging;
+using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Models;
 using System.Collections.Concurrent;
 
@@ -6,16 +7,19 @@ namespace Salky.WebSockets.Implementations;
 
 public class ConnectionPoolMannager : IConnectionPoolMannager
 {
+    private readonly ILogger<ConnectionPoolMannager>? logger;
     private readonly IConnectionMannager RootConnectionMannager;
-    private readonly ConcurrentDictionary<Key, ConnectionMannager> pools;
+    private readonly ConcurrentDictionary<Key, IConnectionMannager> pools;
 
-    public ConnectionPoolMannager(IConnectionMannager RootConnectionMannager)
+    public ConnectionPoolMannager(ILogger<ConnectionPoolMannager>? logger, IConnectionMannager RootConnectionMannager)
     {
+        this.logger = logger;
         this.RootConnectionMannager = RootConnectionMannager;
         pools = new();
+        pools["root"] = this.RootConnectionMannager;
     }
 
-    public async Task<bool> AddOneInPool(Key PoolId, Key ClientKey)
+    public virtual async Task<bool> AddOneInPool(Key PoolId, Key ClientKey)
     {
         var con = RootConnectionMannager.TryGetSocket(ClientKey);
         if (con == null)
@@ -24,7 +28,7 @@ public class ConnectionPoolMannager : IConnectionPoolMannager
             .GetOrAdd(PoolId, (x) => new ConnectionMannager(PoolId))
             .AddConnection(ClientKey, con);
     }
-    public async Task<int> RemoveOneFromPool(Key Poolid, Key ClientKey)
+    public virtual async Task<int> RemoveOneFromPool(Key Poolid, Key ClientKey)
     {
         if (!pools.TryGetValue(Poolid, out var pool))
             return -1;
@@ -33,30 +37,32 @@ public class ConnectionPoolMannager : IConnectionPoolMannager
         RemovePoolIfEmpty(pool);
         return 1;
     }
-
-    private void RemovePoolIfEmpty(ConnectionMannager connection)
+    private void RemovePoolIfEmpty(IConnectionMannager connection)
     {
-        if (connection.Connections.Count == 0)
+        if (connection is ConnectionMannager conM)
         {
-            pools.Remove(connection.Key, out _);
+            if (!conM.Connections.Any())
+                pools.Remove(conM.Key, out _);
         }
-    }
+        else
+        {
+            this.logger!.LogWarning("Unable to evalatue if pool are empty");
+        }
 
-    public async Task<int> SendToOne(Key PoolId, Key ClientKey, MessageServer msg)
+    }
+    public virtual async Task<int> SendToOneInPool(Key PoolId, Key ClientKey, MessageServer msg)
     {
         if (!pools.TryGetValue(PoolId, out var pool))
             return -1;
         return await pool.SendToOne(ClientKey, msg) ? 1 : 0;
     }
-
-    public async Task<int> SendToMany(Key PoolId, Key[] keys, MessageServer msg)
+    public virtual async Task<int> SendToManyInPool(Key PoolId, Key[] keys, MessageServer msg)
     {
         if (!pools.TryGetValue(PoolId, out var pool))
             return -1;
         return await pool.SendToMany(keys, msg);
     }
-
-    public async Task<int> AddManyInPool(Key PoolId, Key[] ClientKeys)
+    public virtual async Task<int> AddManyInPool(Key PoolId, Key[] ClientKeys)
     {
         var pool = pools.GetOrAdd(PoolId, (x) => new ConnectionMannager(PoolId));
         int n = 0;
@@ -71,20 +77,17 @@ public class ConnectionPoolMannager : IConnectionPoolMannager
         }
         return n;
     }
-
-    public async Task<int> SendToAll(Key PoolId, MessageServer msg)
+    public virtual async Task<int> SendToAllInPool(Key PoolId, MessageServer msg)
     {
         if (!pools.TryGetValue(PoolId, out var pool))
             return -1;
         return await pool.SendToAll(msg);
     }
-
-    public async Task<bool> DeletePool(Key PoolId)
+    public virtual async Task<bool> DeletePool(Key PoolId)
     {
         return await Task.FromResult(pools.TryRemove(PoolId, out _));
     }
-
-    public bool IsInPool(Key PoolId, Key ClientKey)
+    public virtual bool IsInPool(Key PoolId, Key ClientKey)
     {
         return this.pools.TryGetValue(PoolId, out var pool) && pool.ContainsKey(ClientKey);
     }

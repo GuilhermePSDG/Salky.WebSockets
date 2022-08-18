@@ -13,13 +13,10 @@ public class WebSocketUser
     }
     public Key UserId { get; private set; }
     public List<Claim> Claims { get; private set; }
-    public IStorage Storage { get; internal set; }
 
     public void Clear()
     {
         Claims.Clear();
-        Storage.Clear();
-        Storage = null;
         Claims = null;
         UserId = "";
     }
