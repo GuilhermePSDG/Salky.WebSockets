@@ -4,10 +4,10 @@
 ### Como usar
 
 - Criar uma aplicação web
-- Executar o codigo abaixo / injectar no container de dependências
+- Executar o código abaixo / injetar no contêiner de dependências
 <img src="readme/example1.png">
 
-- `SetAuthGuard` é usado para permitir ou não a entrada de um usuario
+- `SetAuthGuard` é usado para permitir ou não a entrada de um usuário
 - `UseDefaultConnectionMannager` irá armazenar e disponibilizar as conexões abertas quando preciso
     - `UseBasicConnectionRemotion` irá remover e adicionar as novas conexões automaticamente
 - `UseRouter` ira mapear as rotas de WebSocket
@@ -15,15 +15,15 @@
 
 - Para criar a sua rota, basta cria uma classe que herda de `WebSocketRouteBase` e é anotada por `WebSocketRoute`.<br>Por convenção o caminho da rota no caso abaixo será `'teste'`, sendo possível passar por parâmetro o nome da rota.
    
-    - Cada metodo que está anotado será uma rota aninhada dentro da rota da classe
+    - Cada método anotado será uma rota aninhada dentro da rota da classe
 
-    - Cada rota final, possui um metodo e um caminho
+    - Cada rota final, possui um método e um caminho
 
-    - O anotador do metodo representa o `metodo` da rota e o `caminho`
+    - O anotador do método representa o `método` da rota e o `caminho`
 
-    - Cada rota recebe um único parâmetro, de qualquer tipo. <br> Para multiplos parâmetros é recomendado encapsular em uma classe ou record
+    - Cada rota recebe um único parâmetro, de qualquer tipo. <br> Para múltiplos parâmetros é recomendado encapsular em uma classe ou record
     
-    - `WebSocketRouteBase` fornece metodos para manipular os clientes, recuperar claims/id do client via `User` como demontrado abaixo
+    - `WebSocketRouteBase` fornece métodos para manipular os clientes, recuperar claims/id do client via `User` como demonstrado abaixo
 
 <img src="readme/example2.png">
 
