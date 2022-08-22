@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Salky.WebSockets.Router", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Salky.WebSockets", "Salky.WebSockets\Salky.WebSockets.csproj", "{313C5F27-0AFE-48DD-AB4F-FAB1FCCE8857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Salky.WebSockets.Test", "Salky.WebSockets.Test\Salky.WebSockets.Test.csproj", "{082FA42B-8E8A-44BC-830F-7B309B907FA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Salky.WebSockets.Test", "Salky.WebSockets.Test\Salky.WebSockets.Test.csproj", "{082FA42B-8E8A-44BC-830F-7B309B907FA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{66D24F93-D8D9-44A5-A48A-1B48C7975E8F}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

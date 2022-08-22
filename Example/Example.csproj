@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Salky.WebSockets\Salky.WebSockets.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="JavaScriptUseCase\" />
+  </ItemGroup>
+
 </Project>

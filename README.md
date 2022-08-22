@@ -29,7 +29,12 @@
 <img src="readme/example2.png">
 
 
-### Como usar no lado do cliente `(JS)`
+<br>
+
+> ### [Como usar no lado do cliente `(JS)`](https://github.com/GuilhermePSDG/Salky.WebSockets/blob/main/Example/JavaScriptUseCase/index.js)
+
+<br>
+
 
 
 <h4 align="center"> 🚧 Projeto em construção 🚧 </h4>

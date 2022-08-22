@@ -6,7 +6,7 @@ const enviroment = {
 
 window.addEventListener('load', () => {
     const socket = new SalkySocket();
-    const connect_btn = document.querySelector("#togle");
+    const toggle_btn = document.querySelector("#toggle");
     const ping_btn = document.querySelector("#ping");
 
     ping_btn.addEventListener('click', () => socket.sendMessage('teste/ping', 'post', null))
@@ -17,14 +17,14 @@ window.addEventListener('load', () => {
 
     var removeListener3 = socket.on('teste/ping', 'post', (data) => console.log(`pong received : ${data}`));
 
-    connect_btn.addEventListener('click', () => {
+    toggle_btn.addEventListener('click', () => {
         if (socket.connectionIsOpen) {
             socket.disconnect();
-            connect_btn.innerHTML = 'Connect'
+            toggle_btn.innerHTML = 'Connect'
         }
         else {
             socket.connect();
-            connect_btn.innerHTML = 'Disconect'
+            toggle_btn.innerHTML = 'Disconnect'
         }
     });
 });
@@ -58,7 +58,7 @@ class SalkySocket {
     handleMessage(event) {
         const msg = JSON.parse(event.data);
         const key = this.genKey(msg.path, msg.method);
-        this.routes.route(key, msg)
+        this.routes.route(key, msg.data)
     }
 
     handleError(event) {
@@ -94,7 +94,7 @@ class MessageRouter {
     route(key, msg) {
         const handlers = this.routes[key];
         if (!handlers) return;
-        handlers.forEach(objt => objt.handler(msg.data));
+        handlers.forEach(objt => objt.handler(msg));
     }
 
     on(key, handler) {
