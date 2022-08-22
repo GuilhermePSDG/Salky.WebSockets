@@ -6,6 +6,7 @@
 - Criar uma aplicação web
 - Executar o codigo abaixo / injectar no container de dependências
 <img src="readme/example1.png">
+
     - `SetAuthGuard` é usado para permitir ou não a entrada de um usuario
     - `UseDefaultConnectionMannager` irá armazenar e disponibilizar as conexões abertas quando preciso
         - `UseBasicConnectionRemotion` irá remover e adicionar as novas conexões automaticamente
