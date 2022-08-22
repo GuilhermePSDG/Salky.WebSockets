@@ -12,10 +12,8 @@
         - `UseBasicConnectionRemotion` irá remover e adicionar as novas conexões automaticamente
     - `UseRouter` ira mapear as rotas de WebSocket
 
-<br>
 
 - Criar a sua rota, que será uma classe que herda de `WebSocketRouteBase` e é anotada por `WebSocketRoute`.<br>Por convenção o caminho da rota no caso abaixo será `'teste'`, sendo possível passar por parâmetro o nome da rota.
-<br>
    
     - Cada metodo que está anotado será uma rota aninhada dentro da rota da classe
 
