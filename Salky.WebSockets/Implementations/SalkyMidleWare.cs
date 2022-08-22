@@ -43,10 +43,9 @@ public class SalkyMidleWare
                 logger.LogInformation("Connection not autorized");
                 return;
             }
-            //ws = this.webSocketFactory.CreateNew(await http.WebSockets.AcceptWebSocketAsync("Identifier"), usr, storageFactory.CreateNew());
             ws = await webSocketFactory.CreateNewAsync(http.WebSockets, usr);
-            connectionEventHandler.ToList().ForEach(async x => await x.HandleOpen(ws));
             logger.LogInformation("Connection autorized");
+            connectionEventHandler.ToList().ForEach(async x => await x.HandleOpen(ws));
             await LoopWaitingForMessage(ws, MessageHandler);
         }
         catch (Exception ex)
