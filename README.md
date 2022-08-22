@@ -24,6 +24,8 @@
     - Cada rota recebe um único parâmetro, de qualquer tipo. <br> Para múltiplos parâmetros é recomendado encapsular em uma classe ou record
     
     - `WebSocketRouteBase` fornece métodos para manipular os clientes, recuperar claims/id do client via `User` como demonstrado abaixo
+    
+    - Quando enviado para a pool `root` será enviada para todos os clientes disponíveis
 
 <img src="readme/example2.png">
 
