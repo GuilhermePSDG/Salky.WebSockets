@@ -12,7 +12,7 @@
 - `UseRouter` irá mapear as rotas de WebSocket
 
 
-- Para criar a sua rota, basta cria uma classe que herda de `WebSocketRouteBase` e é anotada por `WebSocketRoute`.<br>Por convenção o caminho da rota no caso abaixo será `'teste'`, sendo possível passar por parâmetro o nome da rota.
+- Para criar a sua rota, basta criar uma classe que herda de `WebSocketRouteBase` e é anotada por `WebSocketRoute`.<br>Por convenção o caminho da rota no caso abaixo será `'teste'`, sendo possível passar por parâmetro o nome da rota.
    
     - Cada método anotado será uma rota aninhada dentro da rota da classe
 
