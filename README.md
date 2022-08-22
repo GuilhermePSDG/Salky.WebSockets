@@ -31,6 +31,8 @@
 
 > ### [Como usar no lado do cliente `(JS)`](https://github.com/GuilhermePSDG/Salky.WebSockets/blob/main/Example/JavaScriptUseCase/index.js)
 
+> ### [Exemplo no lado do server](https://github.com/GuilhermePSDG/Salky.WebSockets/tree/main/Example)
+
 <br>
 
 
