@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSalkyWebSocket(options =>
 {
     options.SetAuthGuard<ConnectionAuthGuard>();
-    options.UseDefaultConnectionMannager((conMannager) => conMannager.UseFullyDeepConnectionRemotion());
+    options.UseDefaultConnectionMannager((conMannager) => conMannager.UseBasicConnectionRemotion());
     options.UseRouter();
 });
 
