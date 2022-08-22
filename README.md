@@ -7,10 +7,10 @@
 - Executar o codigo abaixo / injectar no container de dependências
 <img src="readme/example1.png">
 
-    - `SetAuthGuard` é usado para permitir ou não a entrada de um usuario
-    - `UseDefaultConnectionMannager` irá armazenar e disponibilizar as conexões abertas quando preciso
-        - `UseBasicConnectionRemotion` irá remover e adicionar as novas conexões automaticamente
-    - `UseRouter` ira mapear as rotas de WebSocket
+- `SetAuthGuard` é usado para permitir ou não a entrada de um usuario
+- `UseDefaultConnectionMannager` irá armazenar e disponibilizar as conexões abertas quando preciso
+    - `UseBasicConnectionRemotion` irá remover e adicionar as novas conexões automaticamente
+- `UseRouter` ira mapear as rotas de WebSocket
 
 
 - Criar a sua rota, que será uma classe que herda de `WebSocketRouteBase` e é anotada por `WebSocketRoute`.<br>Por convenção o caminho da rota no caso abaixo será `'teste'`, sendo possível passar por parâmetro o nome da rota.
