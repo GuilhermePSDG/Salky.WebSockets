@@ -13,7 +13,7 @@
 - `UseRouter` ira mapear as rotas de WebSocket
 
 
-- Criar a sua rota, que será uma classe que herda de `WebSocketRouteBase` e é anotada por `WebSocketRoute`.<br>Por convenção o caminho da rota no caso abaixo será `'teste'`, sendo possível passar por parâmetro o nome da rota.
+- Para criar a sua rota, basta cria uma classe que herda de `WebSocketRouteBase` e é anotada por `WebSocketRoute`.<br>Por convenção o caminho da rota no caso abaixo será `'teste'`, sendo possível passar por parâmetro o nome da rota.
    
     - Cada metodo que está anotado será uma rota aninhada dentro da rota da classe
 
@@ -27,8 +27,11 @@
 
 <img src="readme/example2.png">
 
+<br>
 
-### Como usar no lado do cliente `(JS)`
+> ### [Como usar no lado do cliente `(JS)`](https://github.com/GuilhermePSDG/Salky.WebSockets/blob/main/Example/JavaScriptUseCase/index.js)
+
+<br>
 
 
 <h4 align="center"> 🚧 Projeto em construção 🚧 </h4>
