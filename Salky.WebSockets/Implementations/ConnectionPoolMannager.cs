@@ -19,6 +19,14 @@ public class ConnectionPoolMannager : IConnectionPoolMannager
         pools["root"] = this.RootConnectionMannager;
     }
 
+    public IEnumerable<ISalkyWebSocket>? TryGetAllSocketsInPool(Key PoolId)
+    {
+        if (!pools.TryGetValue(PoolId, out var pool))
+            return null;
+        return pool.GetAllSalkyWebSockets();
+    }
+
+
     public virtual async Task<bool> AddOneInPool(Key PoolId, Key ClientKey)
     {
         var con = RootConnectionMannager.TryGetSocket(ClientKey);

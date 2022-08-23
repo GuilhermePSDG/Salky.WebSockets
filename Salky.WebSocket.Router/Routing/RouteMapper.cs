@@ -9,7 +9,7 @@ namespace Salky.WebSockets.Router.Routing
 {
     public class RouteMapper : IRouteMapper
     {
-        public List<RouteInfo> Map()
+        public IEnumerable<RouteInfo> MapRouteInfo()
         {
             Dictionary<string, RouteInfo> MappedRoutes = new();
             foreach (var @class in AllWebSocketRoutesClass)
@@ -23,8 +23,10 @@ namespace Salky.WebSockets.Router.Routing
                     MappedRoutes.Add(key, routeInfo);
                 }
             }
-            return MappedRoutes.Values.ToList();
+            return MappedRoutes.Values;
         }
+        public IEnumerable<Type> MapWsRoutes() => AllWebSocketRoutesClass;
+
         public static IEnumerable<Type> AllWebSocketRoutesClass =>
             ReflectionExtensions
             .GetAllTypesInCurrentAssembly(x => x.GetCustomAttribute(typeof(WebSocketRoute)) != null && x.IsAssignableTo(typeof(WebSocketRouteBase)));
@@ -48,7 +50,6 @@ namespace Salky.WebSockets.Router.Routing
             var classPath = classAtribute.routeName ?? @class.Name.ToLower().Split("route")[0];
             return new RoutePath(classPath, methodAtribute.routePath, methodAtribute.routeMethod);
         }
-
 
 
     }

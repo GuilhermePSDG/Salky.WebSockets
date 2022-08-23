@@ -1,17 +1,15 @@
 using Example;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Salky.WebSockets.Contracts;
 using Salky.WebSockets.Fluent;
 using Salky.WebSockets.Router.Extensions;
-using System.Security.Claims;
-using System.Text;
+using System.Reflection;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -40,8 +38,3 @@ app.UseAuthentication();
 app.MapControllers();
 
 app.Run();
-
-public static class Config
-{
-    public static string JwtKey = "aoskdkaosdkokoqwodkoqkwodkoqwkodkqkowdojkofjwioejfowej";
-}

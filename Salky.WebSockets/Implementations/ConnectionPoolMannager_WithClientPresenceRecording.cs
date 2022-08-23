@@ -65,15 +65,18 @@ public class ConnectionPoolMannager_WithClientPresenceRecording : ConnectionPool
         return result;
     }
 
-
     public override async Task<bool> DeletePool(Key PoolId)
     {
+        var socks = base.TryGetAllSocketsInPool(PoolId);
         var deleted = await base.DeletePool(PoolId);
-        if (deleted)
+        if (deleted && socks != null)
         {
-            foreach (var x in ClientKeyAndPoolList.Values)
+            foreach (var usrId in socks.Select(x => x.User.UserId))
             {
-                x.Remove(PoolId);
+                if (ClientKeyAndPoolList.TryGetValue(usrId, out var hasSet))
+                {
+                    hasSet.Remove(PoolId);
+                }
             }
         }
         return deleted;

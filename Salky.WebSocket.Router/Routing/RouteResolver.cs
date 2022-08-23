@@ -87,10 +87,10 @@ namespace Salky.WebSockets.Router.Routing
 
         private async Task ForEachWebSocketRouteBase(ISalkyWebSocket ws, Func<WebSocketRouteBase, Task> act)
         {
-            foreach (var route in routeList.GetAll())
-            {
-                await act((WebSocketRouteBase)GetRouteInstance(ws, route));
-            }
+            var tasks = routeList
+                .GetAllWsClass()
+                .Select(classType => act((WebSocketRouteBase)GetRouteInstance(ws, classType, RoutePath.Empty)));
+            await Task.WhenAll(tasks.ToArray());
         }
 
         private async Task ExecuteRoute(ISalkyWebSocket connectionWs, RouteInfo route, object[] parameters)
@@ -100,13 +100,17 @@ namespace Salky.WebSockets.Router.Routing
             await WaitIfIsTask(returned);
         }
 
-        private object GetRouteInstance(ISalkyWebSocket connectionWs, RouteInfo route)
+        private object GetRouteInstance(ISalkyWebSocket connectionWs, Type routeClassType, RoutePath path)
         {
-            var objtIstance = serviceProvider.GetRequiredService(route.ClassType);
+            var objtIstance = serviceProvider.GetRequiredService(routeClassType);
             var instanceCast = (WebSocketRouteBase)objtIstance;
             instanceCast.Constructor(connectionWs, serviceProvider.GetRequiredService<IConnectionPoolMannager>());
-            instanceCast.Inject(route.RoutePath);
+            instanceCast.Inject(path);
             return objtIstance;
+        }
+        private object GetRouteInstance(ISalkyWebSocket connectionWs, RouteInfo route)
+        {
+            return GetRouteInstance(connectionWs, route.ClassType, route.RoutePath);
         }
 
         private async Task WaitIfIsTask(object? value)

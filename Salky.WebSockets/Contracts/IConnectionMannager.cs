@@ -43,5 +43,5 @@ public interface IConnectionMannager
     /// <returns>the total sended</returns>
     public Task<int> SendToAll(MessageServer msg);
     internal ISalkyWebSocket? TryGetSocket(Key Key);
-
+    IEnumerable<ISalkyWebSocket> GetAllSalkyWebSockets();
 }

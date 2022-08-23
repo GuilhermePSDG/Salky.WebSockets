@@ -16,6 +16,9 @@ public class ConnectionMannager : IConnectionMannager
         Key = "root";
     }
     public ConcurrentDictionary<Key, ISalkyWebSocket> Connections = new();
+
+    public IEnumerable<ISalkyWebSocket> GetAllSalkyWebSockets() => Connections.Values;
+
     public Task<bool> AddConnection(Key key, ISalkyWebSocket socket)
     {
         return Task.FromResult(Connections.TryAdd(key, socket));

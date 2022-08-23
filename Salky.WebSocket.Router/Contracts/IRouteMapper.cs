@@ -4,6 +4,8 @@ namespace Salky.WebSockets.Router.Contracts
 {
     public interface IRouteMapper
     {
-        public List<RouteInfo> Map();
+        public IEnumerable<RouteInfo> MapRouteInfo();
+        public IEnumerable<Type> MapWsRoutes();
+
     }
 }

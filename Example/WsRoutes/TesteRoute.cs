@@ -7,6 +7,15 @@ namespace Example.WsRoutes
     [WebSocketRoute]
     public class TesteRoute : WebSocketRouteBase
     {
+
+        public override async Task OnConnectAsync()
+        {
+            await SendBack("Hi", "connected", Method.POST);
+            await base.OnConnectAsync();
+        }
+
+
+
         [WsPost("ping")]
         public async Task Ping()
         {

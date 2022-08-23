@@ -17,6 +17,9 @@ window.addEventListener('load', () => {
 
     var removeListener3 = socket.on('teste/ping', 'post', (data) => console.log(`pong received : ${data}`));
 
+    var removeListener4 = socket.on('connected', 'post', (data) => console.log(`connected received : ${data}`));
+
+
     toggle_btn.addEventListener('click', () => {
         if (socket.connectionIsOpen) {
             socket.disconnect();
