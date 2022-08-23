@@ -1,5 +1,5 @@
 # Salky.WebSockets
-> Salky abstrai o uso de WebSocket para uma aplicação similar a implementação de http do dotnet
+> Salky.WebSockets abstrai o uso de WebSocket para uma aplicação similar a implementação de http do dotnet
 ### Como usar
 
 - Criar uma aplicação web
